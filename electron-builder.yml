@@ -1,0 +1,11 @@
+appId: com.stefanopascazi.test-app
+artifactName: ${name}-${version}-${arch}.${ext}
+productName: Test App
+
+linux:
+  synopsis: Test App
+  description: Test App
+  category: Office
+  packageCategory: Office
+  target:
+    - target: deb
