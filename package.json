@@ -1,0 +1,23 @@
+{
+    "name": "electron-quick-start-kiosk",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/stefanopascazi/electron-quick-start-kiosk.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/stefanopascazi/electron-quick-start-kiosk/issues"
+    },
+    "homepage": "https://github.com/stefanopascazi/electron-quick-start-kiosk#readme",
+    "devDependencies": {
+        "electron": "^20.1.3"
+    }
+}
