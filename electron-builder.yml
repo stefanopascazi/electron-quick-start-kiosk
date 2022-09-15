@@ -1,10 +1,10 @@
 appId: com.stefanopascazi.test-app
 artifactName: ${name}-${version}-${arch}.${ext}
-productName: Test App
+productName: Test Appcd
 
 linux:
-  synopsis: Test App
-  description: Test App
+  synopsis: Test Appcd
+  description: Test Appcd
   category: Office
   packageCategory: Office
   target:

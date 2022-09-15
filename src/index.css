@@ -1,0 +1,9 @@
+body,
+html,
+#root {
+    height: 100vh;
+    background-color: #eee;
+    /*#eee*/
+    font-size: 0.8rem;
+    color: #111111;
+}

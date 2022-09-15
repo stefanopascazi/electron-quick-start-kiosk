@@ -1,0 +1,5 @@
+provider: 'github'
+owner: 'stefanopascazi'
+repo: 'manga-comic-crm-desktop'
+private: true,
+token: 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
