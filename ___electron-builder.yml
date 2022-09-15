@@ -9,3 +9,4 @@ linux:
   packageCategory: Office
   target:
     - target: deb
+    - target: AppImage
