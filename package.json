@@ -22,7 +22,7 @@
         "electron:release:win": "electron-builder build --win --publish always",
         "build:linux": "npm run react:build && npm run electron:generate:icons && npm run electron:build:linux",
         "build:win": "npm run react:build && npm run electron:generate:icons && npm run electron:build:win",
-        "build": "electron-builder build",
+        "build": "npm run react:build && electron-builder build",
         "deploy": "npm run react:build && npm run electron:generate:icons && GH_TOKEN=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 npm run electron:deploy",
         "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && npm run electron:ts:compile\""
     },
