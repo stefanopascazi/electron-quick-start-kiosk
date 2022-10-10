@@ -3,19 +3,12 @@ import path from 'path'
 import isDev from 'electron-is-dev'
 import * as RemoteMain from '@electron/remote/main'
 import windowFunction from './components/window-function'
-
-// const database = new sqlite3.Database('./public/db/database.db', (err) => {
-//     if (err) console.error('Database opening error: ', err);
-// });
-
-// database.all("SELECT * FROM repository", (err, rows) => {
-//     console.log(rows);
-// });
+import callApi from './components/callapi'
 
 RemoteMain.initialize()
 
 let mainWindow: BrowserWindow;
-const appUrl: string = isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
+const appUrl: string = isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "/../build/index.html")}`
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -26,7 +19,9 @@ const createWindow = (): void => {
             contextIsolation: false,
         },
         title: `Application GPIO ver.${app.getVersion()}`,
-        kiosk: true
+        kiosk: false,
+        width: 1024,
+        height: 600
     });
 
     RemoteMain.enable(mainWindow.webContents)
@@ -43,6 +38,7 @@ const createWindow = (): void => {
 
     mainWindow.once("ready-to-show", () => {
         new windowFunction(app, mainWindow)
+        new callApi()
     })
 }
 

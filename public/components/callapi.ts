@@ -1,93 +1,102 @@
-import { dialog, ipcMain } from 'electron'
-import axios from 'axios'
-import FormData from 'form-data'
-import path from 'path';
-import fs from 'fs'
+import {  ipcMain } from 'electron'
+import EventStore from '../db/stores/eventsStore'
+import GpioStore from '../db/stores/gpioStore'
+import { IGpio } from '../interface/GPio'
+import {Gpio} from 'onoff'
+
+const gpio: Array<IGpio> = [{
+    label : "GPIO 4",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 5",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 6",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 7",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 20",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 21",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 29",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 33",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 25",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+},{
+    label : "GPIO 26",
+    status: false,
+    enable: false,
+    start: 0,
+    end: 0
+}]
 
 export default class callApi {
 
-    store;
-    jwt;
-    app;
-    mainWindow;
-
-    constructor(store: any, jwt: string, app: any, mainWindow: any)
+    constructor()
     {
-        this.store = store;
-        this.jwt = jwt;
-        this.app = app;
-        this.mainWindow = mainWindow;
-
         this.run();
     }
     run = () => {
 
-        ipcMain.handle("getdata", async (e: any, args: any) => {
-            return;
+        ipcMain.handle("create_event", async (e: Electron.IpcMainInvokeEvent, args: any) => {            
+
+            const events = await EventStore.create(args)
+
+            //const result = gpio.map( async(v) => await GpioStore.create({...v,event_id: events?._id}))            
+
+            return events
         })
 
-        ipcMain.handle("uploadimages", async (e: any, args: any) => {
-            const { url, headers } = args;
-            headers.headers["Authorization"] = `Bearer ${this.store.get(this.jwt)}`
-
-            let filepath: any = undefined;
-            let file: any;
-
-            let properties: any;
-            if( process.platform !== 'darwin' )
-            {
-                properties = {
-                    properties: ['openFile', 'multiSelections']
-                }
+        ipcMain.handle("start_gpio", async (e: Electron.IpcMainInvokeEvent, args: any) => {
+            const led = new Gpio(4, "out")
+            if( led.readSync() === 0 ){
+                led.writeSync(1)
             } else {
-                properties = {
-                    properties: ['openFile', 'openDirectory', 'multiSelections']
-                }
+                led.writeSync(0)
             }
-            
-            // Resolves to a Promise<Object>
-            file = await dialog.showOpenDialog({
-                title: 'Select the File to be uploaded',
-                buttonLabel: 'Upload',
-                // Restricting the user to only Text Files.
-                filters: [
-                    {
-                        name: 'Image Files',
-                        extensions: ['jpg', 'png', 'gif', 'jpeg']
-                    }, ],
-                // Specifying the File Selector Property
-                properties: properties.properties
-            });
-            
-            if (!file.canceled) {
-                // Updating the GLOBAL filepath variable 
-                // to user-selected file.
-                filepath = file.filePaths;
-                const formData: any = new FormData();
-                if( filepath.length > 0 )
-                {
-                    for( var i = 0; i < filepath.length; i++ )
-                    {
-                        formData.append("file[]", fs.createReadStream(filepath[i]))
-                    }
-                    headers.headers["Content-Type"] = `multipart/form-data; boundary=${formData._boundary}`
-                    try {
-                        const res = await axios.post(url, formData, headers)
-                        if (res.status === 200) {
-                            return {
-                                status: res.data
-                            }
-                        } else {
-                            return {
-                                status: false,
-                                message: res.data.message
-                            };
-                        }
-                    } catch (err) {
-                        return err
-                    }
-                }
-            }
+
+            setTimeout(()=> {
+                led.writeSync(0)
+                led.unexport();
+            })
+
+            return true;
         })
     }
 }
