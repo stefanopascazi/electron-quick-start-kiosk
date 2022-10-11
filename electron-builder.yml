@@ -1,6 +1,8 @@
 appId: com.stefanopascazi.test-app
 artifactName: ${name}-${version}-${arch}.${ext}
 productName: GPIO
+nodeGypRebuild: false
+buildDependenciesFromSource: false
 
 linux:
   synopsis: GPIO

@@ -4,6 +4,7 @@ import isDev from 'electron-is-dev'
 import * as RemoteMain from '@electron/remote/main'
 import windowFunction from './components/window-function'
 import callApi from './components/callapi'
+import {Gpio} from 'onoff'
 
 RemoteMain.initialize()
 
@@ -56,3 +57,19 @@ app.on("activate", () => {
 ipcMain.on('app_version', (event) => {
     event.sender.send('app_version', { version: app.getVersion() });
 });
+
+ipcMain.on("start_gpio", (e: Electron.IpcMainInvokeEvent, args: any) => {
+    const led = new Gpio(4, "out")
+    if( led.readSync() === 0 ){
+        led.writeSync(1)
+    } else {
+        led.writeSync(0)
+    }
+
+    setTimeout(()=> {
+        led.writeSync(0)
+        led.unexport();
+    }, 10000)
+
+    return true;
+})

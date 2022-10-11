@@ -1,7 +1,8 @@
 {
-    "name": "electron-quick-start-kiosk",
-    "version": "0.0.3",
-    "description": "",
+    "name": "gpio",
+    "productName": "gpio",
+    "version": "0.0.6",
+    "description": "An awesome app!",
     "main": "public/electron.js",
     "scripts": {
         "react:start": "react-scripts start",
@@ -25,7 +26,12 @@
         "build": "npm run react:build && electron-builder build",
         "build:arm": "npm run react:build && electron-builder build --linux --armv7l",
         "deploy": "npm run react:build && npm run electron:generate:icons && GH_TOKEN=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 npm run electron:deploy",
-        "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && npm run electron:ts:compile\""
+        "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && npm run electron:ts:compile\"",
+        "arm64": "electron-installer-debian --src dist/gpio-linux-arm64/ --dest dist/installers/ --arch arm64",
+        "package": "rm -rf ./dist && npm run react:build && electron-packager . --platform linux --arch arm64 --out dist/ --overwrite"
+    },
+    "packagerConfig": {
+        "executableName": "gpio"
     },
     "repository": {
         "type": "git",
@@ -98,6 +104,9 @@
         "electron": "^20.1.1",
         "electron-builder": "^23.3.3",
         "electron-icon-builder": "^2.0.1",
+        "electron-installer-debian": "^3.1.0",
+        "electron-packager": "^16.0.0",
+        "rimraf": "^3.0.2",
         "wait-on": "^6.0.1"
     }
 }

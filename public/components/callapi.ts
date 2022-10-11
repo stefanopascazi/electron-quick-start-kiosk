@@ -2,7 +2,6 @@ import {  ipcMain } from 'electron'
 import EventStore from '../db/stores/eventsStore'
 import GpioStore from '../db/stores/gpioStore'
 import { IGpio } from '../interface/GPio'
-import {Gpio} from 'onoff'
 
 const gpio: Array<IGpio> = [{
     label : "GPIO 4",
@@ -83,20 +82,6 @@ export default class callApi {
             return events
         })
 
-        ipcMain.handle("start_gpio", async (e: Electron.IpcMainInvokeEvent, args: any) => {
-            const led = new Gpio(4, "out")
-            if( led.readSync() === 0 ){
-                led.writeSync(1)
-            } else {
-                led.writeSync(0)
-            }
-
-            setTimeout(()=> {
-                led.writeSync(0)
-                led.unexport();
-            })
-
-            return true;
-        })
+        
     }
 }

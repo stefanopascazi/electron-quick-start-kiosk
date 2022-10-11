@@ -80,7 +80,7 @@ const Dashboard = () => {
     // }, [_getData])
 
     const testGpio = async() => {
-        const data = await ipcRenderer.invoke("start_gpio", {
+        const data = ipcRenderer.send("start_gpio", {
             title: "Primo evento"
         })
 
